@@ -1,0 +1,26 @@
+{
+  "name": "shoe_dawg",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "lint": "eslint js/",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest --verbose"
+  },
+  "dependencies": {
+    "react": "16.2.0",
+    "react-native": "0.53.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "babel-jest": "22.2.2",
+    "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.18.0",
+    "eslint-plugin-react": "^7.6.1",
+    "jest": "22.3.0",
+    "react-test-renderer": "16.2.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
