@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import App from './js/App';
+import Root from './js/Root';
 
-AppRegistry.registerComponent('shoe_dawg', () => App);
+AppRegistry.registerComponent('shoe_dawg', () => Root);
