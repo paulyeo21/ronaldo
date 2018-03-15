@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { Icon } from 'react-native-elements';
+import ShoeList from './ShoeList';
 
 class ProfileScreen extends Component {
   render() {
@@ -27,30 +28,35 @@ class HomeScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Home Screen</Text>
+        <ShoeList />
       </View>
     );
   }
 }
 
-export default TabNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarIcon: () => <Icon name="home" />
+export default TabNavigator(
+  {
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="home" color={tintColor} />
+      }
+    },
+    Search: {
+      screen: SearchScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
+      }
+    },
+    Profile: {
+      screen: ProfileScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="person" color={tintColor} />
+      }
     }
   },
-  Search: {
-    screen: SearchScreen,
-    navigationOptions: {
-      tabBarIcon: () => <Icon name="search" />
-    }
-  },
-  Profile: {
-    screen: ProfileScreen,
-    navigationOptions: {
-      tabBarIcon: () => <Icon name="person" />
+  {
+    tabBarOptions: {
     }
   }
-});
-
+);
