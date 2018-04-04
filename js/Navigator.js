@@ -4,16 +4,7 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import ShoeList from './ShoeList';
 import ProfileScreen from './ProfileScreen';
-
-class SearchScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Search Screen</Text>
-      </View>
-    );
-  }
-}
+import SearchScreen from './SearchScreen';
 
 class HomeScreen extends Component {
   render() {
