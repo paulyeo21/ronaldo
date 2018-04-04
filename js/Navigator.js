@@ -1,20 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import ShoeList from './ShoeList';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from './SearchScreen';
-
-class HomeScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ShoeList />
-      </View>
-    );
-  }
-}
+import HomeScreen from './HomeScreen';
 
 export default TabNavigator(
   {
