@@ -3,16 +3,7 @@ import { Text, View } from 'react-native';
 import { TabNavigator, TabBarBottom } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import ShoeList from './ShoeList';
-
-class ProfileScreen extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Profile Screen</Text>
-      </View>
-    );
-  }
-}
+import ProfileScreen from './ProfileScreen';
 
 class SearchScreen extends Component {
   render() {
