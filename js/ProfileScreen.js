@@ -2,13 +2,29 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   ScrollView,
-  Text,
   View,
+  Text,
   FlatList,
   TouchableHighlight,
+  Button,
 } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import NavTabHeader from './shared/NavTabHeader';
+
+const styles = StyleSheet.create({
+  ProfileListItemContainer: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
 
 class ProfileListItem extends Component {
   onPress = () => {
@@ -23,7 +39,7 @@ class ProfileListItem extends Component {
          activeOpacity={ 0.9 }
          underlayColor='#d3d3d3'
       >
-        <View key={ this.props.text } style={ styles.ProfileListItemContainer }>
+        <View style={ styles.ProfileListItemContainer }>
           <Icon name={ this.props.icon } />
           { content }
         </View>
@@ -32,26 +48,31 @@ class ProfileListItem extends Component {
   }
 }
 
-export default class ProfileScreen extends Component {
+class ProfileScreen extends Component {
   render() {
     const profileListItems = [
       {
+        key: "inviteFriends",
         icon: "drafts",
         text: "Invite Friends",
       },
       {
+        key: "becomeSeller",
         icon: "face",
         text: "Become a Seller",
       },
       {
+        key: "payment",
         icon: "payment",
         text: "Payment",
       },
       {
+        key: "settings",
         icon: "settings",
         text: "Settings",
       },
       {
+        key: "feedback",
         icon: "feedback",
         text: "Feedback",
       },
@@ -62,23 +83,22 @@ export default class ProfileScreen extends Component {
         <NavTabHeader title='Profile' />
         <FlatList
           data={ profileListItems }
-          renderItem={ ({ item }) => <ProfileListItem { ...item } /> }
+          renderItem={ ({ item }) => <ProfileListItem navigation={ this.props.navigation } { ...item } /> }
         />
       </ScrollView>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  ProfileListItemContainer: {
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingTop: 30,
-    paddingBottom: 30,
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+export default StackNavigator(
+  {
+    Profile: {
+      screen: ProfileScreen,
+    },
   },
-})
+  {
+    initialRouteName: "Profile",
+    mode: 'modal',
+    headerMode: 'none',
+  },
+);
