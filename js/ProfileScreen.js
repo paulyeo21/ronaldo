@@ -11,6 +11,7 @@ import {
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import NavTabHeader from './shared/NavTabHeader';
+import BecomeSellerFlow from './BecomeSellerFlow';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
 
 class ProfileListItem extends Component {
   onPress = () => {
+    this.props.navigation.navigate("BecomeSellerFlow");
   }
 
   render() {
@@ -94,6 +96,9 @@ export default StackNavigator(
   {
     Profile: {
       screen: ProfileScreen,
+    },
+    BecomeSellerFlow: {
+      screen: BecomeSellerFlow,
     },
   },
   {
