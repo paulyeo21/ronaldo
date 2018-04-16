@@ -14,15 +14,87 @@ const styles = StyleSheet.create({
 });
 
 function flowComponent(InnerComponent, flowOrder) {
-  return (
-    props => {
-      let headerButtons = [];
-      let footerButtons = [];
+  const flowIndex = flowOrder.indexOf(InnerComponent.displayName);
 
-      headerButtons.push(
+  return class FlowComponent extends Component {
+    constructor() {
+      super();
+      this.flowIndex = flowIndex;
+      this.flowOrder = flowOrder;
+
+      this.state = {
+        isNextEnabled: true,
+        isPrevEnabled: true,
+      };
+    }
+
+    navigatePrev = () => {
+      if (!this.state.isPrevEnabled) return;
+      this.props.navigation.goBack(null);
+    }
+
+    navigateNext = () => {
+      if (!this.state.isNextEnabled) return;
+      this.props.navigation.navigate(this.flowOrder[this.flowIndex + 1]);
+    }
+
+    enableNext = () => {
+      this.setState({ isNextEnabled: true });
+    }
+
+    disableNext = () => {
+      this.setState({ isNextEnabled: false });
+    }
+
+    enablePrev = () => {
+      this.setState({ isPrevEnabled: true });
+    }
+
+    disablePrev = () => {
+      this.setState({ isPrevEnabled: false });
+    }
+
+    close = () => {
+      this.props.screenProps.dismiss();
+    }
+
+    prevButton = () => {
+      return (
+        <Button
+          key="backButton"
+          onPress={ this.navigatePrev }
+          title="Back"
+          disabled={ !this.state.isPrevEnabled }
+        />
+      );
+    }
+
+    nextButton = () => {
+      return (
+        <Button
+          key="nextButton"
+          onPress={ this.navigateNext }
+          title="Next"
+          disabled={ !this.state.isNextEnabled }
+        />
+      );
+    }
+
+    doneButton = () => {
+      return (
+        <Button
+          key="doneButton"
+          onPress={ this.close }
+          title="Done"
+        />
+      );
+    }
+
+    closeButton = () => {
+      return (
         <Button
           key="closeButton"
-          onPress={() => { props.screenProps.dismiss() }}
+          onPress={ this.close }
         >
           <Icon
             type="font-awesome"
@@ -30,47 +102,21 @@ function flowComponent(InnerComponent, flowOrder) {
           />
         </Button>
       );
+    }
 
-      const flowIndex = flowOrder.indexOf(InnerComponent.displayName);
+    render() {
+      let headerButtons = [];
+      let navButtons = {};
 
-      if (flowIndex === 0) {
-        footerButtons.push(
-          <Button
-            key="nextButton"
-            onPress={ () => { props.navigation.navigate(flowOrder[flowIndex + 1]); } }
-            title="Next"
-          />
-        )
-      } else if (flowIndex > 0 && flowIndex < flowOrder.length - 1) {
-        footerButtons.push(
-          <Button
-            key="backButton"
-            onPress={ () => { props.navigation.goBack(null); } }
-            title="Back"
-          />
-        );
-        footerButtons.push(
-          <Button
-            key="nextButton"
-            onPress={ () => { props.navigation.navigate(flowOrder[flowIndex + 1]); } }
-            title="Next"
-          />
-        );
-      } else if (flowIndex === flowOrder.length - 1) {
-        footerButtons.push(
-          <Button
-            key="backButton"
-            onPress={ () => { props.navigation.goBack(null); } }
-            title="Back"
-          />
-        );
-        footerButtons.push(
-          <Button
-            key="doneButton"
-            onPress={ () => { props.screenProps.dismiss(); } }
-            title="Done"
-          />
-        )
+      headerButtons.push(this.closeButton());
+      if (this.flowIndex === 0) {
+        navButtons.nextButton = this.nextButton();
+      } else if (this.flowIndex > 0 && this.flowIndex < this.flowOrder.length - 1) {
+        navButtons.prevButton = this.prevButton();
+        navButtons.nextButton = this.nextButton();
+      } else if (this.flowIndex === this.flowOrder.length - 1) {
+        navButtons.prevButton = this.prevButton();
+        navButtons.doneButton = this.doneButton();
       } else {
         console.warn("Display item not defined in flow");
       }
@@ -78,12 +124,18 @@ function flowComponent(InnerComponent, flowOrder) {
       return (
         <View style={{ flex: 1 }}>
           { headerButtons }
-          <InnerComponent {...props} />
-          { footerButtons }
+          <InnerComponent
+            {...this.props}
+            disableNext={ this.disableNext }
+            enableNext={ this.enableNext }
+            navigateNext={ this.navigateNext }
+            navigatePrev={ this.navigatePrev }
+            { ...navButtons }
+          />
         </View>
       );
     }
-  );
+  };
 };
 
 function DismissableStackNavigator(routes, options) {

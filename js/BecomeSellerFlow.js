@@ -27,6 +27,7 @@ class Screen1 extends Component {
         <Text h4>Manage your assets</Text>
         <Text>Your shoes are your assets. With every transaction, Shoe Head will track and deliver insights into how your transactions are stacking so that you get every ounce out of your shoes.</Text>
         <Text h4>Questions?</Text>
+        { this.props.nextButton }
       </View>
     );
   }
@@ -61,6 +62,8 @@ class Screen2 extends Component {
           data={ steps }
           renderItem={ ({item}) => <Text>{ item.text }</Text> }
         />
+        { this.props.prevButton }
+        { this.props.nextButton }
       </View>
     );
   }
@@ -93,6 +96,8 @@ class Screen5 extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Text>Congratulations! You are one step closer to becoming a Shoe Head!</Text>
+        { this.props.prevButton }
+        { this.props.doneButton }
       </View>
     );
   }
