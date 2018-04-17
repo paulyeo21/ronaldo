@@ -6,12 +6,13 @@ import {
   Text,
   FlatList,
   TouchableHighlight,
-  Button,
 } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
+import Button from './shared/Button';
 import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
+import UserProfile from './UserProfile';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
 
 class ProfileListItem extends Component {
   onPress = () => {
-    this.props.navigation.navigate("BecomeSellerFlow");
+    this.props.navigation.navigate(this.props.navigateTo);
   }
 
   render() {
@@ -62,6 +63,7 @@ class ProfileScreen extends Component {
         key: "becomeSeller",
         icon: "face",
         text: "Become a Seller",
+        navigateTo: "BecomeSellerFlow",
       },
       {
         key: "payment",
@@ -82,7 +84,11 @@ class ProfileScreen extends Component {
 
     return (
       <ScrollView>
-        <NavTabHeader title='Profile' />
+        <Button
+          onPress={ () => { this.props.navigation.navigate("UserProfile") } }
+        >
+          <NavTabHeader title='Profile' />
+        </Button>
         <FlatList
           data={ profileListItems }
           renderItem={ ({ item }) => <ProfileListItem navigation={ this.props.navigation } { ...item } /> }
@@ -94,15 +100,18 @@ class ProfileScreen extends Component {
 
 export default StackNavigator(
   {
-    Profile: {
+    ProfileTabRoot: {
       screen: ProfileScreen,
+    },
+    UserProfile: {
+      screen: UserProfile,
     },
     BecomeSellerFlow: {
       screen: BecomeSellerFlow,
     },
   },
   {
-    initialRouteName: "Profile",
+    initialRouteName: "ProfileTabRoot",
     mode: 'modal',
     headerMode: 'none',
   },
