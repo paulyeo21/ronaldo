@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from "react-navigation";
 import Header from './Header';
@@ -21,5 +22,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ShoeDawg;
+function mapStateToProps(state, props) {
+  return {}
+}
 
+export default connect(mapStateToProps)(ShoeDawg);

@@ -1,25 +1,21 @@
-/**
- *
- */
-
-'use strict';
-
 import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { composeWithDevTools } from 'remote-redux-devtools';
+import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import rootReducer from './reducers';
+import rootReducer from './data/reducer';
  
 const loggerMiddleware = createLogger();
- 
-function configureStore(preloadedState) {
-  return createStore(
-    rootReducer,
-    preloadedState,
-    applyMiddleware(
-      thunkMiddleware,
-      loggerMiddleware
-    )
-  );
-}
 
-module.exports = configureStore;
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 8000 });
+
+const store = createStore(
+  rootReducer,
+  composeEnhancers(
+    applyMiddleware(
+      thunk,
+      loggerMiddleware
+    ),
+  )
+);
+
+export default store;

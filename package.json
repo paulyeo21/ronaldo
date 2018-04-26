@@ -6,7 +6,8 @@
     "flow": "flow",
     "lint": "eslint js/",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "remotedev": "remotedev --hostname=localhost --port=8000"
   },
   "dependencies": {
     "moment": "^2.22.1",
@@ -32,7 +33,9 @@
     "eslint-plugin-react": "^7.6.1",
     "flow-bin": "^0.66.0",
     "jest": "22.3.0",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.2.0",
+    "remote-redux-devtools": "^0.5.12",
+    "remotedev-server": "^0.2.4"
   },
   "jest": {
     "preset": "react-native"
