@@ -10,6 +10,7 @@
     "remotedev": "remotedev --hostname=localhost --port=8000"
   },
   "dependencies": {
+    "buffer": "^5.1.0",
     "fetchival": "^0.3.3",
     "moment": "^2.22.1",
     "react": "16.2.0",
