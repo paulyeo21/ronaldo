@@ -6,9 +6,13 @@
     "flow": "flow",
     "lint": "eslint js/",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "remotedev": "remotedev --hostname=localhost --port=8000"
   },
   "dependencies": {
+    "buffer": "^5.1.0",
+    "fetchival": "^0.3.3",
+    "moment": "^2.22.1",
     "react": "16.2.0",
     "react-native": "0.53.2",
     "react-native-elements": "^0.19.0",
@@ -17,7 +21,9 @@
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "tcomb-form-native": "^0.6.11",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -29,7 +35,9 @@
     "eslint-plugin-react": "^7.6.1",
     "flow-bin": "^0.66.0",
     "jest": "22.3.0",
-    "react-test-renderer": "16.2.0"
+    "react-test-renderer": "16.2.0",
+    "remote-redux-devtools": "^0.5.12",
+    "remotedev-server": "^0.2.4"
   },
   "jest": {
     "preset": "react-native"
