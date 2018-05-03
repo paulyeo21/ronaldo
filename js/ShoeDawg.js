@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaView } from "react-navigation";
+import { StackNavigator } from 'react-navigation';
 import Header from './Header';
 import Footer from './Footer';
-import Navigator from './Navigator';
+import Login from './Login';
+import Register from './Register';
+import MainNavigator from './Navigator';
 
-class ShoeDawg extends Component {
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Navigator />
-      </SafeAreaView>
-    );
+const authNavigator = StackNavigator(
+  {
+    Login: {
+      screen: Login,
+    },
+    Register: {
+      screen: Register,
+    },
+    MainNavigator: {
+      screen: MainNavigator,
+    },
+  },
+  {
+    initialRouteName: 'Login',
+    headerMode: 'none',
   }
-}
+);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
-
-function mapStateToProps(state, props) {
-  return {}
-}
-
-export default connect(mapStateToProps)(ShoeDawg);
+export default authNavigator;
