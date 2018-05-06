@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from './SearchScreen';
 import HomeScreen from './HomeScreen';
+import AuthModalNavigator from './AuthModal';
 
-export default TabNavigator(
+const MainNavigator = TabNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -27,8 +28,22 @@ export default TabNavigator(
     }
   },
   {
-    animationEnabled: true,
-    tabBarOptions: {
-    }
   }
 );
+
+const TabNavigatorWithAuth = StackNavigator(
+  {
+    MainNavigator: {
+      screen: MainNavigator,
+    },
+    AuthModalNavigator: {
+      screen: AuthModalNavigator,
+    },
+  },
+  {
+    headerMode: 'none',
+    mode: 'modal',
+  },
+);
+
+export default TabNavigatorWithAuth;

@@ -13,6 +13,7 @@ import Button from './shared/Button';
 import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
 import UserProfile from './UserProfile';
+import { protectedComponent } from './AuthModal';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -101,7 +102,7 @@ class ProfileScreen extends Component {
 export default StackNavigator(
   {
     ProfileTabRoot: {
-      screen: ProfileScreen,
+      screen: protectedComponent(ProfileScreen),
     },
     UserProfile: {
       screen: UserProfile,
