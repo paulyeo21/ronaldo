@@ -13,7 +13,7 @@ import t from 'tcomb-form-native';
 import * as session from './services/session';
 import * as api from './services/api'
 
-const Login = t.struct({
+const LoginFields = t.struct({
   username: t.String,
   password: t.String,
 });
@@ -32,7 +32,8 @@ class LoginScreen extends Component {
     const value = this.form.getValue();
     session.authenticate(value.email, value.password)
 		.then(() => {
-			this.props.navigation.navigate('MainNavigator');
+      const nav = this.props.navigation;
+			nav.navigate(nav.getParam('navigateTo', 'MainNavigator'));
 		})
 		.catch(exception => {
 			// Displays only the first error message
@@ -48,11 +49,22 @@ class LoginScreen extends Component {
 		});
   }
 
+  onContinueAsGuest = () => {
+    this.props.navigation.navigate('MainNavigator');
+  }
+
   renderError = () => {
 		if (!this.state.error) return;
 
     return (<Text style={ styles.error }>{ this.state.error }</Text>);
 	}
+
+  onRegister = () => {
+    const nav = this.props.navigation;
+    nav.navigate('Register', {
+      navigateTo: nav.getParam('navigateTo', 'MainNavigator'),
+    });
+  }
 
   setForm = component => {
     this.form = component;
@@ -66,7 +78,7 @@ class LoginScreen extends Component {
 				<View>
           <t.form.Form
             ref={ this.setForm }
-            type={ Login }
+            type={ LoginFields }
           />
 					<Button
 						onPress={ this.onPressLogin }
@@ -74,9 +86,14 @@ class LoginScreen extends Component {
 					  { this.state.isLoading ? <ActivityIndicator /> : <Text>Login</Text> }
 					</Button>
           <Button
-						onPress={() => this.props.navigation.navigate('Register') }
+						onPress={ this.onRegister }
 					>
 						<Text>Register</Text>
+					</Button>
+          <Button
+						onPress={ this.onContinueAsGuest }
+					>
+						<Text>Continue as Guest</Text>
 					</Button>
 				</View>
 			</View>

@@ -33,7 +33,8 @@ class RegisterScreen extends Component {
     const value = this.form.getValue();
     usersApi.create(value.email, value.password)
 		.then(() => {
-			this.props.navigation.navigate('MainNavigator');
+      const nav = this.props.navigation;
+      nav.navigate(nav.getParam('navigateTo', 'MainNavigator'));
 		})
 		.catch(exception => {
 			// Displays only the first error message
