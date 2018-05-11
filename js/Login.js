@@ -28,6 +28,14 @@ class LoginScreen extends Component {
     }
   }
 
+  componentWillMount() {
+    session.refreshToken().then(() => {
+			this.props.navigation.navigate('MainNavigator');
+		}).catch(() => {
+			this.props.navigation.navigate('Login');
+		});
+  }
+
   onPressLogin = () => {
     const value = this.form.getValue();
     session.authenticate(value.email, value.password)

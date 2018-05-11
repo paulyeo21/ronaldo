@@ -4,9 +4,15 @@ import apiConfig from '../api/config';
 
 const endPoints = {
 	authenticate: '/posts/1',
+	revoke: '/posts',
+	refresh: '/posts',
+};
+
+const endPointFurreals = {
+	authenticate: '/api/login',
 	revoke: '/api/logout',
 	refresh: '/api/current_login',
-};
+}
 
 export const authenticate = (email, password) => fetchApi(endPoints.authenticate, {}, 'get', {
 	Authorization: `Basic ${new Buffer(`${email}:${password}`).toString('base64')}`,
