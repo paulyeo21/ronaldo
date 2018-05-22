@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { StackNavigator, TabNavigator, TabBarBottom } from 'react-navigation';
+import { StackNavigator, createBottomTabNavigator} from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from './SearchScreen';
 import HomeScreen from './HomeScreen';
-import AuthModalNavigator from './AuthModal';
+import ListingsScreen from './ListingsScreen';
+import StatisticsScreen from './StatisticsScreen';
+import { ConnectedAuthModal } from './AuthModal';
 
-const MainNavigator = TabNavigator(
+const BuyNavigator = createBottomTabNavigator(
   {
     Home: {
       screen: HomeScreen,
@@ -27,23 +29,47 @@ const MainNavigator = TabNavigator(
       }
     }
   },
+);
+
+const SellNavigator = createBottomTabNavigator(
   {
+    Listings: {
+      screen: ListingsScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="home" color={tintColor} />
+      }
+    },
+    Statistics: {
+      screen: StatisticsScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
+      }
+    },
+    Profile: {
+      screen: ProfileScreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon name="person" color={tintColor} />
+      }
+    }
   }
-);
+)
 
-const TabNavigatorWithAuth = StackNavigator(
+const MainTabNavigator = StackNavigator(
   {
-    MainNavigator: {
-      screen: MainNavigator,
+    BuyNavigator: {
+      screen: BuyNavigator,
     },
-    AuthModalNavigator: {
-      screen: AuthModalNavigator,
+    SellNavigator: {
+      screen: SellNavigator,
     },
+    AuthModal: {
+      screen: ConnectedAuthModal,
+    }
   },
   {
-    headerMode: 'none',
     mode: 'modal',
+    headerMode: 'none',
   },
 );
 
-export default TabNavigatorWithAuth;
+export default MainTabNavigator;

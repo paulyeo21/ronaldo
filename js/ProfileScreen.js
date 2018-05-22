@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
   StyleSheet,
   ScrollView,
@@ -14,6 +15,7 @@ import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
 import UserProfile from './UserProfile';
 import { protectedComponent } from './AuthModal';
+import * as sessionSelectors from './services/session/selectors';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -54,18 +56,39 @@ class ProfileListItem extends Component {
 
 class ProfileScreen extends Component {
   render() {
+    let switchToSellerItem;
+    if (true || this.props.user.hasSeller) {
+      if (false) {
+        switchToSellerItem = {
+          key: "switchToBuyerNav",
+          icon: "face",
+          text: "Switch to buyer",
+          navigateTo: "BuyNavigator",
+        };
+      } else {
+        switchToSellerItem = {
+          key: "switchToSellerNav",
+          icon: "face",
+          text: "Switch to seller",
+          navigateTo: "SellNavigator",
+        };
+      }
+    } else {
+      switchToSellerItem = {
+        key: "becomeSeller",
+        icon: "face",
+        text: "Become a Seller",
+        navigateTo: "BecomeSellerFlow",
+      };
+    }
+
     const profileListItems = [
       {
         key: "inviteFriends",
         icon: "drafts",
         text: "Invite Friends",
       },
-      {
-        key: "becomeSeller",
-        icon: "face",
-        text: "Become a Seller",
-        navigateTo: "BecomeSellerFlow",
-      },
+      switchToSellerItem,
       {
         key: "payment",
         icon: "payment",
@@ -99,10 +122,18 @@ class ProfileScreen extends Component {
   }
 }
 
+const mapStateToProps = (state, props) => {
+  return {
+    user: sessionSelectors.get().user,
+  };
+}
+
+const ConnectedProfileScreen = connect(mapStateToProps)(ProfileScreen);
+
 export default StackNavigator(
   {
     ProfileTabRoot: {
-      screen: protectedComponent(ProfileScreen),
+      screen: protectedComponent(ConnectedProfileScreen),
     },
     UserProfile: {
       screen: UserProfile,

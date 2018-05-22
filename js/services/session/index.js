@@ -31,6 +31,7 @@ const onRequestSuccess = (response) => {
 		},
 		user: {
 			id: 'aznShoeGod',
+			hasSeller: true,
 		},
 	}));
 	setSessionTimeout(response.headers.get('expiresIn') || 3600); // 1 hour
