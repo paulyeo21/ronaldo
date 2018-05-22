@@ -11,10 +11,7 @@ export default class Root extends Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate
-          loading={ <Splash /> }
-          persistor={ persistor }
-        >
+        <PersistGate loading={<Splash />} persistor={persistor}>
           <App />
         </PersistGate>
       </Provider>

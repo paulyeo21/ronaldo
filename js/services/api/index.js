@@ -17,14 +17,15 @@ export const fetchApi = (endPoint, payload = {}, method = 'get', headers = {}) =
 	const accessToken = sessionSelectors.get().tokens.access.value;
 	return fetch(`${apiConfig.url}${endPoint}`, {
     method,
-		headers: _.pick({
-			...(accessToken ? {
-				Authorization: `Bearer ${accessToken}`,
-			} : {
-				'Client-ID': apiConfig.clientId,
-			}),
+		headers: _.pick(
+			{
+				...(accessToken
+					? { Authorization: `Bearer ${accessToken}` }
+					: { 'Client-ID': apiConfig.clientId }
+				),
 			...headers,
-		}, item => !_.isEmpty(item)),
+			}, item => !_.isEmpty(item)
+		),
 	})
 	.catch((e) => {
 		if (e.response && e.response.json) {
