@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import App from './ShoeDawg';
-import configureStore from './configureStore';
-import { PersistGate } from 'redux-persist/integration/react'
+import App from './Ronaldo';
+import { store, persistor } from './configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
 import Splash from './Splash';
-
-const { store, persistor } = configureStore();
 
 export default class Root extends Component {
   render() {

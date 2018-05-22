@@ -1,18 +1,14 @@
-import * as actionTypes from './actionTypes';
+import { UPDATE_USER } from '../actions/actionTypes';
 
-const initialState = {
-  items: {},
-};
-
-export const reducer = (state=initialState, action) => {
+export default item = (state = {}, action) => {
   switch (action.type) {
-    case actionTypes.UPDATE:
+    case UPDATE_USER:
       return {
         items: {
           ...state.items,
           ..._.reduce(action.items, (prev, curr) => ({
             ...prev,
-						[curr.id]: curr,
+            [curr.id]: curr,
           }), {}),
         }
       };

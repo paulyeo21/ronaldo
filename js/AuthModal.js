@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StackNavigator } from 'react-navigation';
 import {
   View,
   ActivityIndicator,
@@ -11,9 +10,7 @@ import {
   Text,
 } from 'react-native-elements';
 import t from 'tcomb-form-native';
-import * as sessionSelectors from './services/session/selectors';
-import * as session from './services/session';
-import * as api from './services/api';
+import * as sessionSelectors from './selectors/session';
 
 const LoginFields = t.struct({
   username: t.String,
@@ -36,43 +33,47 @@ class AuthModal extends Component {
   }
 
   onPressLogin = () => {
-    const value = this.form.getValue();
-    session.authenticate(value.email, value.password)
-		.then(() => {
-      this.props.navigation.state.params.onAuthSuccess();
-		})
-		.catch(exception => {
-			// Displays only the first error message
-			const error = api.exceptionExtractError(exception);
-			this.setState({
-				isLoading: false,
-				...(error ? { error } : {}),
-			});
-
-			if (!error) {
-				throw exception;
-			}
-		});
+    const data = this.form.getValue();
+    if (data) {
+      this.props.login(data.email, data.password)
+        .then(res => {
+          if (res) {
+            this.props.navigation.navigate('MainNavigator');
+          } 
+        });
+    }
   }
 
   onPressRegister = () => {
-    const value = this.form.getValue();
-    usersApi.create(value.email, value.password)
-		.then(() => {
-      this.props.navigation.state.params.onAuthSuccess();
-		})
-		.catch(exception => {
-			// Displays only the first error message
-			const error = api.exceptionExtractError(exception);
-			this.setState({
-				isLoading: false,
-				...(error ? { error } : {}),
-			});
+    const data = this.form.getValue();
+    if (data) {
+      const email = data.email;
+      const password = data.password;
+      api.createUser(email, password)
+        .then((response) => {
+          if (response.status == 201) {
+            this.props.navigation.navigate('MainNavigator');
+          } else {
+            const _this = this;
+            response.json().then(function(json) {
+              _this.setState({
+                isLoading: false,
+                error: `${response.status}: ${json.message}`,
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          this.setState({
+            isLoading: false,
+            error: error.message,
+          });
+          console.log(error);
+        });
 
-			if (!error) {
-				throw exception;
-			}
-		});
+      // Auto-login
+      this.props.login(email, password);
+    }
   }
 
   onSwitchToLogin = () => {
