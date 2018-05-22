@@ -40,8 +40,7 @@ class LoginScreen extends Component {
     const value = this.form.getValue();
     session.authenticate(value.email, value.password)
 		.then(() => {
-      const nav = this.props.navigation;
-			nav.navigate(nav.getParam('navigateTo', 'MainNavigator'));
+			this.props.navigation.navigate('MainNavigator');
 		})
 		.catch(exception => {
 			// Displays only the first error message
@@ -68,10 +67,7 @@ class LoginScreen extends Component {
 	}
 
   onRegister = () => {
-    const nav = this.props.navigation;
-    nav.navigate('Register', {
-      navigateTo: nav.getParam('navigateTo', 'MainNavigator'),
-    });
+    this.props.navigation.navigate('Register');
   }
 
   setForm = component => {
