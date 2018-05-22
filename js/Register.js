@@ -104,6 +104,10 @@ class RegisterScreen extends Component {
       })
     }
   }
+  
+  onPressBack = () => {
+    this.props.navigation.goBack(null);
+  }
 
   setForm = component => {
     this.form = component;
