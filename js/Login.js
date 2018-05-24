@@ -1,70 +1,44 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  View,
-  ActivityIndicator,
-} from 'react-native';
-import Button from './shared/Button';
-import {
-  Icon,
-  Text,
-} from 'react-native-elements';
-import t from 'tcomb-form-native';
-import * as session from './services/session';
-import * as api from './services/api'
+import { View, ActivityIndicator, TouchableHighlight } from 'react-native';
+import { Text } from 'react-native-elements';
+import sessionActions from './actions/session';
+import { Form, LoginForm, loginFormOptions } from './forms';
+import styles from '../css';
 
-const LoginFields = t.struct({
-  username: t.String,
-  password: t.String,
-});
 
 class LoginScreen extends Component {
   constructor() {
     super();
-
     this.state = {
       error: null,
       isLoading: false,
-    }
+    };
   }
 
   componentWillMount() {
-    session.refreshToken().then(() => {
-			this.props.navigation.navigate('MainNavigator');
-		}).catch(() => {
-			this.props.navigation.navigate('Login');
-		});
+    // refreshToken().then(() => {
+    //   this.props.navigation.navigate('MainNavigator');
+    // }).catch(() => {
+    //   this.props.navigation.navigate('Login');
+    // });
   }
 
   onPressLogin = () => {
-    const value = this.form.getValue();
-    session.authenticate(value.email, value.password)
-		.then(() => {
-			this.props.navigation.navigate('MainNavigator');
-		})
-		.catch(exception => {
-			// Displays only the first error message
-			const error = api.exceptionExtractError(exception);
-			this.setState({
-				isLoading: false,
-				...(error ? { error } : {}),
-			});
-
-			if (!error) {
-				throw exception;
-			}
-		});
+    const { email, password } = this.form.getValue();
+    if (email && password) {
+      this.props.login(email, password)
+        .then(res => {
+          if (res) {
+            this.props.navigation.navigate('MainNavigator');
+          } 
+        });
+    }
   }
 
   onContinueAsGuest = () => {
     this.props.navigation.navigate('MainNavigator');
   }
-
-  renderError = () => {
-		if (!this.state.error) return;
-
-    return (<Text style={ styles.error }>{ this.state.error }</Text>);
-	}
 
   onRegister = () => {
     this.props.navigation.navigate('Register');
@@ -76,45 +50,35 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        {this.state.error ? <Text>{ this.state.error }</Text> : null}
-				<Text h2>Login</Text>
-				<View>
-          <t.form.Form
-            ref={ this.setForm }
-            type={ LoginFields }
+      <View style={styles.container}>
+        {this.state.error ? <View style={styles.error}><Text style={styles.errorText}>{this.state.error}</Text></View> : null}
+        <Text style={styles.title}>
+          PREME
+        </Text>
+        <View>
+          <Form
+            ref={this.setForm}
+            type={LoginForm}
+            options={loginFormOptions}
           />
-					<Button
-						onPress={ this.onPressLogin }
-					>
-					  { this.state.isLoading ? <ActivityIndicator /> : <Text>Login</Text> }
-					</Button>
-          <Button
-						onPress={ this.onRegister }
-					>
-						<Text>Register</Text>
-					</Button>
-          <Button
-						onPress={ this.onContinueAsGuest }
-					>
-						<Text>Continue as Guest</Text>
-					</Button>
-				</View>
-			</View>
+          <TouchableHighlight onPress={this.onPressLogin} style={styles.button}>
+            { this.state.isLoading ? <ActivityIndicator /> : <Text style={styles.buttonText}>Login</Text> }
+          </TouchableHighlight>
+          <Text style={styles.fineprint}>
+            Not a member? <Text style={styles.underline} onPress={this.onRegister}>Register</Text>
+          </Text>
+          <Text style={styles.fineprint}>
+            <Text style={styles.underline} onPress={this.onContinueAsGuest}>Continue as guest</Text>
+          </Text>
+        </View>
+      </View>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {};
-}
+const mapDispatchToProps = dispatch => ({
+  login: (email, password) => dispatch(sessionActions.login(email, password))
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    authenticate: (email, password) => {
-      session.authenticate(email, password);
-    },
-  };
-}
+export default connect(null, mapDispatchToProps)(LoginScreen);
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

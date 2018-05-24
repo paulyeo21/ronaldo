@@ -10,7 +10,7 @@ import {
   TouchableHighlight,
   ActivityIndicator,
 } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import {
   Text,
   Icon,
@@ -161,7 +161,7 @@ class UserProfile extends Component {
   }
 }
 
-export default StackNavigator(
+export default createStackNavigator(
   {
     UserProfile: {
       screen: UserProfile,

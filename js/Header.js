@@ -1,11 +1,5 @@
-/**
- *
- */
-
-'use strict';
-
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 export default class Header extends Component {
   render() {

@@ -8,7 +8,7 @@ import {
   Icon,
 } from 'react-native-elements';
 import Button from './Button';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 const styles = StyleSheet.create({
 });
@@ -139,7 +139,7 @@ function flowComponent(InnerComponent, flowOrder) {
 };
 
 function DismissableStackNavigator(routes, options) {
-  const StackNav = StackNavigator(routes, options);
+  const StackNav = createStackNavigator(routes, options);
 
   return class DismissableStackNav extends Component {
     static router = StackNav.router;

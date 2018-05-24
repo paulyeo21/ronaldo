@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StackNavigator, createBottomTabNavigator} from 'react-navigation';
+import { createStackNavigator, createBottomTabNavigator} from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import ProfileScreen from './ProfileScreen';
 import SearchScreen from './SearchScreen';
@@ -54,7 +54,7 @@ const SellNavigator = createBottomTabNavigator(
   }
 )
 
-const MainTabNavigator = StackNavigator(
+const MainTabNavigator = createStackNavigator(
   {
     BuyNavigator: {
       screen: BuyNavigator,

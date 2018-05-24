@@ -8,14 +8,14 @@ import {
   FlatList,
   TouchableHighlight,
 } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import Button from './shared/Button';
 import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
 import UserProfile from './UserProfile';
 import { protectedComponent } from './AuthModal';
-import * as sessionSelectors from './services/session/selectors';
+import * as sessionSelectors from './selectors/session';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -130,7 +130,7 @@ const mapStateToProps = (state, props) => {
 
 const ConnectedProfileScreen = connect(mapStateToProps)(ProfileScreen);
 
-export default StackNavigator(
+export default createStackNavigator(
   {
     ProfileTabRoot: {
       screen: protectedComponent(ConnectedProfileScreen),
