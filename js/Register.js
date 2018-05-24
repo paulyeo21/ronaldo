@@ -10,7 +10,7 @@ import {
 } from 'react-native-elements';
 import { Form, RegisterForm, registerFormOptions } from './forms';
 import styles from '../css';
-import { login } from './actions';
+import sessionActions from './actions/session';
 import * as api from './api';
 
 
@@ -24,18 +24,21 @@ class RegisterScreen extends Component {
   }
 
   onPressRegister = () => {
-    const data = this.form.getValue();
-    if (data) {
-      const email = data.email;
-      const password = data.password;
+    const { email, password } = this.form.getValue();
+    if (email && password) {
       api.createUser(email, password)
         .then((response) => {
-          if (response.status == 201) {
-            this.props.navigation.navigate('MainNavigator');
+          if (response.status === 201) {
+            // Auto-login
+            this.props.login(email, password)
+              .then(res => {
+                if (res) {
+                  this.props.navigation.navigate('MainNavigator');
+                }
+              });
           } else {
-            const _this = this;
-            response.json().then(function(json) {
-              _this.setState({
+            response.json().then(json => {
+              this.setState({
                 isLoading: false,
                 error: `${response.status}: ${json.message}`,
               });
@@ -49,9 +52,6 @@ class RegisterScreen extends Component {
           });
           console.log(error);
         });
-
-      // Auto-login
-      this.props.login(email, password);
     }
   }
 
@@ -96,8 +96,8 @@ class RegisterScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(login(email, password))
+  login: (email, password) => dispatch(sessionActions.login(email, password))
 });
 
-export default connect(() => ({}), mapDispatchToProps)(RegisterScreen);
+export default connect(null, mapDispatchToProps)(RegisterScreen);
 

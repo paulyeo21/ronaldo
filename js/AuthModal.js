@@ -33,9 +33,9 @@ class AuthModal extends Component {
   }
 
   onPressLogin = () => {
-    const data = this.form.getValue();
-    if (data) {
-      this.props.login(data.email, data.password)
+    const { email, password } = this.form.getValue();
+    if (email && password) {
+      this.props.login(email, password)
         .then(res => {
           if (res) {
             this.props.navigation.navigate('MainNavigator');
@@ -45,18 +45,21 @@ class AuthModal extends Component {
   }
 
   onPressRegister = () => {
-    const data = this.form.getValue();
-    if (data) {
-      const email = data.email;
-      const password = data.password;
+    const { email, password } = this.form.getValue();
+    if (email && password) {
       api.createUser(email, password)
         .then((response) => {
           if (response.status == 201) {
-            this.props.navigation.navigate('MainNavigator');
+            // Auto-login
+            this.props.login(email, password)
+              .then(res => {
+                if (res) {
+                  this.props.navigation.navigate('MainNavigator');
+                }
+              });
           } else {
-            const _this = this;
-            response.json().then(function(json) {
-              _this.setState({
+            response.json().then(json => {
+              this.setState({
                 isLoading: false,
                 error: `${response.status}: ${json.message}`,
               });
@@ -70,9 +73,6 @@ class AuthModal extends Component {
           });
           console.log(error);
         });
-
-      // Auto-login
-      this.props.login(email, password);
     }
   }
 

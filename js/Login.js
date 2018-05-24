@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, ActivityIndicator, TouchableHighlight } from 'react-native';
 import { Text } from 'react-native-elements';
-import { login, logout, currentLogin } from './actions';
+import sessionActions from './actions/session';
 import { Form, LoginForm, loginFormOptions } from './forms';
 import styles from '../css';
 
@@ -25,9 +25,9 @@ class LoginScreen extends Component {
   }
 
   onPressLogin = () => {
-    const data = this.form.getValue();
-    if (data) {
-      this.props.login(data.email, data.password)
+    const { email, password } = this.form.getValue();
+    if (email && password) {
+      this.props.login(email, password)
         .then(res => {
           if (res) {
             this.props.navigation.navigate('MainNavigator');
@@ -37,13 +37,7 @@ class LoginScreen extends Component {
   }
 
   onContinueAsGuest = () => {
-    // this.props.login('a@gmail.com', 'a');
     this.props.navigation.navigate('MainNavigator');
-  }
-
-  onRefresh = () => {
-    // this.props.currentLogin();
-    // this.props.logout();
   }
 
   onRegister = () => {
@@ -76,11 +70,6 @@ class LoginScreen extends Component {
           <Text style={styles.fineprint}>
             <Text style={styles.underline} onPress={this.onContinueAsGuest}>Continue as guest</Text>
           </Text>
-          {/*
-          <Text style={styles.fineprint}>
-            <Text style={styles.underline} onPress={this.onRefresh}>Refresh Token</Text>
-          </Text>
-          */}
         </View>
       </View>
     );
@@ -88,10 +77,8 @@ class LoginScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(login(email, password)),
-  logout: () => dispatch(logout()),
-  currentLogin: () => dispatch(currentLogin())
+  login: (email, password) => dispatch(sessionActions.login(email, password))
 });
 
-export default connect(() => ({}), mapDispatchToProps)(LoginScreen);
+export default connect(null, mapDispatchToProps)(LoginScreen);
 

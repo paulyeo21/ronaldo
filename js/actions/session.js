@@ -1,20 +1,20 @@
 import { SET_SESSION, CLEAR_SESSION } from './actionTypes';
-import { setEmail } from './email';
+import emailActions from './email';
 import * as api from '../api';
 
 
-export const setSession = session => ({
+const setSession = session => ({
   type: SET_SESSION,
   session
 });
 
-export const clearSession = () => ({
+const clearSession = () => ({
   type: CLEAR_SESSION
 });
 
-export const login = (email, password) => {
+const login = (email, password) => {
   return dispatch => {
-    dispatch(setEmail(email));
+    dispatch(emailActions.setEmail(email));
 
     return api.login(email, password)
       .then(res => {
@@ -32,7 +32,7 @@ export const login = (email, password) => {
   };
 };
 
-export const currentLogin = () => {
+const currentLogin = () => {
   return (dispatch, getState) => {
     const session = getState().session;
     return api.currentLogin(session.accessToken, session.refreshToken)
@@ -42,7 +42,7 @@ export const currentLogin = () => {
   };
 };
 
-export const logout = () => {
+const logout = () => {
   return (dispatch, getState) => {
     const session = getState().session;
     return api.logout(session.accessToken, session.refreshToken)
@@ -54,3 +54,11 @@ export const logout = () => {
       });
   };
 };
+
+export default {
+  setSession,
+  clearSession,
+  login,
+  currentLogin,
+  logout
+}
