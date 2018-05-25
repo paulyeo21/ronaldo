@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
+import styles from '../css';
 
 import ShoeList from './ShoeList';
 
 export default class HomeScreen extends Component {
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <SafeAreaView style={ styles.screenContainer }>
         <ShoeList />
-      </View>
+      </SafeAreaView>
     );
   }
 }

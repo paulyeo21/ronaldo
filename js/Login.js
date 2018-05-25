@@ -25,9 +25,10 @@ class LoginScreen extends Component {
   }
 
   onPressLogin = () => {
-    const { email, password } = this.form.getValue();
-    if (email && password) {
-      this.props.login(email, password)
+    const data = this.form.getValue(); // cant do const { email, password} because will
+                                       // fail to parse when this.form.getValue() is null
+    if (data) {
+      this.props.login(data.email, data.password)
         .then(res => {
           if (res) {
             this.props.navigation.navigate('MainNavigator');

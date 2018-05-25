@@ -64,3 +64,12 @@ export const logout = (accessToken, refreshToken) => {
   });
 };
 
+export const fetchShoes = (fromPage = 0, pageSize) => {
+  return fetch(url(`${routes.shoes.get}?from=${fromPage}&size=${pageSize}`), {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+  });
+};

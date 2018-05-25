@@ -4,22 +4,18 @@ import {
   Text,
   View
 } from 'react-native';
+import styles from '../css';
 
 class ShoeItem extends Component {
   render() {
     return (
-      <View style={styles.rowContainer}>
-        <Text>Shoe</Text>
+      <View style={ styles.shoeItem }>
+        <Text>{ this.props.brand.toUpperCase() }</Text>
+        <Text>{ this.props.name.toUpperCase() }</Text>
+        <Text>{ this.props.sku }</Text>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  rowContainer: {
-    flexDirection: "row",
-    height: 100
-  }
-});
 
 export default ShoeItem;

@@ -49,7 +49,7 @@ class AuthModal extends Component {
     if (email && password) {
       api.createUser(email, password)
         .then((response) => {
-          if (response.status == 201) {
+          if (response.status === 201) {
             // Auto-login
             this.props.login(email, password)
               .then(res => {
