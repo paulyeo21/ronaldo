@@ -7,4 +7,4 @@ const setEmail = email => ({
 
 export default {
   setEmail
-}
+};

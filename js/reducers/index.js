@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 import sessionReducer from './session';
-import emailReducer from './email';
+import userReducer from './user';
+import shoeReducer from './shoe';
 
 export default reducer = combineReducers({
   session: sessionReducer,
-  email: emailReducer,
+  user: userReducer,
+  shoes: shoeReducer,
 });
 
