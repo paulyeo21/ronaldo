@@ -26,7 +26,7 @@ const RootStack = createSwitchNavigator(
 
 class Ronaldo extends Component {
   componentDidMount() {
-    this.props.loadShoes(0, config.flatListSize);
+    this.props.fetchShoes();
   }
 
   render() {
@@ -35,7 +35,7 @@ class Ronaldo extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  loadShoes: (fromPage, pageSize) => dispatch(shoeActions.loadShoes(fromPage, pageSize))
+  fetchShoes: () => dispatch(shoeActions.fetchShoes())
 });
 
 export default connect(null, mapDispatchToProps)(Ronaldo);

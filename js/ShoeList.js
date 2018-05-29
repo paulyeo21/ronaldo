@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import {
   FlatList,
@@ -8,20 +8,23 @@ import {
   TouchableHighlight
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { SafeAreaView } from 'react-navigation';
 import ShoeItem from './ShoeItem';
 import _ from 'underscore';
 import styles from '../css';
 import shoeActions from './actions/shoe';
 import { config } from './api/config';
+import * as api from './api';
 
-class ShoeList extends Component {
+class ShoeList extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       refreshing: false,
       fromPage: 0,
-      pageSize: config.flatListSize
+      pageSize: config.maxPageSize,
+      query: ''
     };
   };
 
@@ -43,13 +46,11 @@ class ShoeList extends Component {
     return <View style={ styles.flatListFooter }/>;
   };
 
-  fetchShoes = () => {
-    this.props.loadShoes(this.state.fromPage, this.state.pageSize)
+  _fetchShoes = () => {
+    this.props.fetchShoes(this.state.query, this.state.fromPage, this.state.pageSize)
       .then(res => {
-        if (res) {
-          this.setState({
-            refreshing: false,
-          });
+        if (res.status === 200) {
+          this.setState({ refreshing: false });
         }
       });
   };
@@ -62,15 +63,29 @@ class ShoeList extends Component {
                   // because we don't want them to be at page 10 and getting a
                   // huge payload back
     }, () => {
-      this.fetchShoes();
+      this._fetchShoes(this.state.query, this.state.fromPage, this.state.pageSize);
     });
   };
 
   handleLoadMore = () => {
+    // Only fetch if more than page size otherwise, needlessly fetches
+    // because the end is apparent without much scrolling
+    // TODO: when end of flatlist should stop requesting and not increment fromPage
+    if (this.props.shoes.length >= this.state.pageSize) {
+      this.setState({
+        fromPage: this.state.fromPage + this.state.pageSize
+      }, () => {
+        this._fetchShoes(this.state.query, this.state.fromPage, this.state.pageSize);
+      });
+    }
+  };
+
+  handleChangeText = (query) => {
     this.setState({
-      fromPage: this.state.fromPage + this.state.pageSize
+      fromPage: 0,
+      query: query
     }, () => {
-      this.fetchShoes();
+      this._fetchShoes(query, this.state.fromPage, this.state.pageSize);
     });
   };
 
@@ -80,9 +95,11 @@ class ShoeList extends Component {
         <SearchBar
           placeholder="Search"
           lightTheme
+          clearIcon={{ style: styles.searchBarClearIcon }}
           containerStyle={ styles.searchBarContainer }
           inputStyle={ styles.searchBarInput }
           icon={{ style: styles.searchBarIcon }}
+          onChangeText={ this.handleChangeText }
         />
         <TouchableHighlight style={ styles.filterButton }>
           <Text style={ styles.filterButtonText }>
@@ -90,7 +107,8 @@ class ShoeList extends Component {
           </Text>
         </TouchableHighlight>
         <FlatList
-          data={ this.props.shoes.listings }
+          data={ this.props.shoes }
+          extraData={ this.props.shoes }
           renderItem={ this._renderItem }
           keyExtractor={ this._keyExtractor }
           ItemSeparatorComponent={ this.renderSeparator }
@@ -106,11 +124,11 @@ class ShoeList extends Component {
 }
 
 const mapStateToProps = state => ({
-  shoes: state.shoes
+  shoes: state.shoes.listings
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadShoes: (fromPage, pageSize) => dispatch(shoeActions.loadShoes(fromPage, pageSize))
+  fetchShoes: (query, fromPage, pageSize) => dispatch(shoeActions.fetchShoes(query, fromPage, pageSize))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShoeList);

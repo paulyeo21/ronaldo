@@ -1,37 +1,38 @@
 import { SET_SHOE_LISTINGS, APPEND_SHOE_LISTINGS } from './actionTypes';
 import * as api from '../api';
+import { config } from '../api/config';
 
-export const setShoeListings = (json) => ({
+const setShoeListings = (json) => ({
   type: SET_SHOE_LISTINGS,
   shoes: json
 });
 
-export const appendShoeListings = (json) => ({
+const appendShoeListings = (json) => ({
   type: APPEND_SHOE_LISTINGS,
   shoes: json
 });
 
-export const loadShoes = (fromPage, pageSize) => {
+const fetchShoes = (query = '', fromPage = 0, pageSize = config.maxPageSize) => {
   return dispatch => {
-    return api.fetchShoes(fromPage, pageSize)
-      .then(res => {
-        if (res.status === 200) {
-          res.json().then(json => { // { shoeListings: ... }
-            if (fromPage == 0) {
-              dispatch(setShoeListings(json.shoeListings));
-            } else {
-              dispatch(appendShoeListings(json.shoeListings));
-            }
-          });
-          return true;
+    const response = api.fetchShoes(query, fromPage, pageSize);
+    response
+      .then(res => res.json())
+      .then(json => {
+        if (fromPage === 0) {
+          dispatch(setShoeListings(json.shoeListings));
         } else {
-          return false;
+          dispatch(appendShoeListings(json.shoeListings));
         }
-      });
+      })
+      .catch(error => {
+        console.log(error);
+      }); // TODO: handle error
+    return response;
   };
 };
 
 export default {
   setShoeListings,
-  loadShoes
+  appendShoeListings,
+  fetchShoes
 };

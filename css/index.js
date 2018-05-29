@@ -93,6 +93,10 @@ export default styles = StyleSheet.create({
     top: 11,
     left: 12
   },
+  searchBarClearIcon: {
+    position: 'absolute',
+    top: 11,
+  },
   flatListFooter: {
     paddingTop: 85
   }
