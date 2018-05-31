@@ -9,7 +9,6 @@ export const routes = {
   logout: `/${namespace}/logout`,
   currentLogin: `/${namespace}/current_login`,
   shoes: {
-    get: `/${namespace}/shoes`,
     post: `/${namespace}/shoes`,
   },
   search: {

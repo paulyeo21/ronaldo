@@ -12,13 +12,20 @@ const appendShoeListings = (json) => ({
   shoes: json
 });
 
-const fetchShoes = (query = '', fromPage = 0, pageSize = config.maxPageSize) => {
+const defaultPayload = {
+  'q': '',
+  'from': 0,
+  'size': config.maxPageSize,
+  'filters': {}
+}
+
+const fetchShoes = (payload = defaultPayload) => {
   return dispatch => {
-    const response = api.fetchShoes(query, fromPage, pageSize);
+    const response = api.fetchShoes(payload);
     response
       .then(res => res.json())
       .then(json => {
-        if (fromPage === 0) {
+        if (payload.from === 0) {
           dispatch(setShoeListings(json.shoeListings));
         } else {
           dispatch(appendShoeListings(json.shoeListings));
