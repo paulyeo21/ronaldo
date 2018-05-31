@@ -24,8 +24,10 @@ class RegisterScreen extends Component {
   }
 
   onPressRegister = () => {
-    const { email, password } = this.form.getValue();
-    if (email && password) {
+    const data = this.form.getValue(); // cant do const { email, password} because will
+                                       // fail to parse when this.form.getValue() is null
+    if (data) {
+      const { email, password } = data;
       api.createUser(email, password)
         .then((response) => {
           if (response.status === 201) {

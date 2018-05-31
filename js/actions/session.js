@@ -22,9 +22,9 @@ const login = (email, password) => {
           const session = {
             accessToken: res.headers.get('Set-Authorization'),
             refreshToken: res.headers.get('Set-Refresh-Token')
-          }
-          dispatch(setSession(session))
-          return session
+          };
+          dispatch(setSession(session));
+          return session;
         } else {
           // Handle errors
         }
@@ -61,4 +61,4 @@ export default {
   login,
   currentLogin,
   logout
-}
+};

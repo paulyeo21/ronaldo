@@ -19,7 +19,7 @@ const BuyNavigator = createBottomTabNavigator(
     Search: {
       screen: SearchScreen,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
+        tabBarIcon: ({ tintColor }) => <Icon name="heart" type='font-awesome' color={tintColor} />
       }
     },
     Profile: {
