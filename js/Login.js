@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, ActivityIndicator, TouchableHighlight } from 'react-native';
 import { Text } from 'react-native-elements';
-import sessionActions from './actions/session';
+import userActions from './actions/user';
 import { Form, LoginForm, loginFormOptions } from './forms';
 import styles from '../css';
-
+import navActions from './actions/nav';
+import { 
+  REGISTER_ROUTE,
+  BUYER_HOME_ROUTE
+} from './routes';
 
 class LoginScreen extends Component {
   constructor() {
@@ -25,24 +29,24 @@ class LoginScreen extends Component {
   }
 
   onPressLogin = () => {
-    const data = this.form.getValue(); // cant do const { email, password} because will
+    const data = this.form.getValue(); // cant do const { email, password } because will
                                        // fail to parse when this.form.getValue() is null
     if (data) {
       this.props.login(data.email, data.password)
         .then(res => {
           if (res) {
-            this.props.navigation.navigate('MainNavigator');
-          } 
+            this.props.navigateTo(this.props.navigation.getParam('redirect', BUYER_HOME_ROUTE));
+          }
         });
     }
   }
 
   onContinueAsGuest = () => {
-    this.props.navigation.navigate('MainNavigator');
+    this.props.navigateTo(BUYER_HOME_ROUTE);
   }
 
   onRegister = () => {
-    this.props.navigation.navigate('Register');
+    this.props.navigateTo(REGISTER_ROUTE);
   }
 
   setForm = component => {
@@ -78,7 +82,8 @@ class LoginScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(sessionActions.login(email, password))
+  navigateTo: routeName => dispatch(navActions.navigateTo(routeName)),
+  login: (email, password) => dispatch(userActions.login(email, password))
 });
 
 export default connect(null, mapDispatchToProps)(LoginScreen);
