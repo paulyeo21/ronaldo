@@ -33,7 +33,7 @@ class RegisterScreen extends Component {
             this.props.login(email, password)
               .then(res => {
                 if (res) {
-                  this.props.navigation.navigate('MainNavigator');
+                  this.props.navigation.dispatch({ type: 'MainNavigator' });
                 }
               });
           } else {
@@ -64,7 +64,7 @@ class RegisterScreen extends Component {
   }
 
   onPressSignin = () => {
-    this.props.navigation.navigate('Login');
+    this.props.navigation.dispatch({ type: 'Login' });
   }
 
   render() {

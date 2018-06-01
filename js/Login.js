@@ -30,18 +30,18 @@ class LoginScreen extends Component {
       this.props.login(email, password)
         .then(res => {
           if (res) {
-            this.props.navigation.navigate('MainNavigator');
-          } 
+            this.props.navigation.dispatch({ type: 'MainNavigator' });
+          }
         });
     }
   }
 
   onContinueAsGuest = () => {
-    this.props.navigation.navigate('MainNavigator');
+    this.props.navigation.dispatch({ type: 'MainNavigator' });
   }
 
   onRegister = () => {
-    this.props.navigation.navigate('Register');
+    this.props.navigation.dispatch({ type: 'Register' });
   }
 
   setForm = component => {
