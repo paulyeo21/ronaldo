@@ -12,6 +12,7 @@ import { Form, RegisterForm, registerFormOptions } from './forms';
 import styles from '../css';
 import sessionActions from './actions/session';
 import * as api from './api';
+import navActions from './actions/nav';
 
 
 class RegisterScreen extends Component {
@@ -33,7 +34,7 @@ class RegisterScreen extends Component {
             this.props.login(email, password)
               .then(res => {
                 if (res) {
-                  this.props.navigation.dispatch({ type: 'MainNavigator' });
+                  this.props.navigateTo('MainNavigator');
                 }
               });
           } else {
@@ -64,7 +65,7 @@ class RegisterScreen extends Component {
   }
 
   onPressSignin = () => {
-    this.props.navigation.dispatch({ type: 'Login' });
+    this.props.navigateTo('Login');
   }
 
   render() {
@@ -96,8 +97,8 @@ class RegisterScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
+  navigateTo: routeName => dispatch(navActions.navigateTo(routeName)),
   login: (email, password) => dispatch(sessionActions.login(email, password))
 });
 
 export default connect(null, mapDispatchToProps)(RegisterScreen);
-

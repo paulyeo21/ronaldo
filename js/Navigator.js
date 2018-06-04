@@ -5,10 +5,8 @@ import SearchScreen from './SearchScreen';
 import HomeScreen from './HomeScreen';
 import ListingsScreen from './ListingsScreen';
 import StatisticsScreen from './StatisticsScreen';
-/*
 import { ConnectedAuthModal } from './AuthModal';
 import ProfileScreen from './ProfileScreen';
-*/
 
 const BuyNavigator = createBottomTabNavigator(
   {
@@ -24,14 +22,12 @@ const BuyNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
       }
     },
-    /*
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon name="person" color={tintColor} />
       }
     }
-    */
   },
 );
 
@@ -49,14 +45,12 @@ const SellNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => <Icon name="search" color={tintColor} />
       }
     },
-    /*
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => <Icon name="person" color={tintColor} />
       }
     }
-    */
   }
 )
 
@@ -68,11 +62,9 @@ const MainTabNavigator = createStackNavigator(
     SellNavigator: {
       screen: SellNavigator,
     },
-    /*
     AuthModal: {
       screen: ConnectedAuthModal,
     }
-    */
   },
   {
     mode: 'modal',

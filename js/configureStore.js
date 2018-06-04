@@ -13,6 +13,7 @@ import {
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['nav'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

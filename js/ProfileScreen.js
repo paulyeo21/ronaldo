@@ -15,7 +15,6 @@ import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
 import UserProfile from './UserProfile';
 import { protectedComponent } from './AuthModal';
-import * as sessionSelectors from './selectors/session';
 
 const styles = StyleSheet.create({
   ProfileListItemContainer: {
@@ -124,7 +123,7 @@ class ProfileScreen extends Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    user: sessionSelectors.get().user,
+    user: state.session.user,
   };
 }
 
@@ -133,7 +132,7 @@ const ConnectedProfileScreen = connect(mapStateToProps)(ProfileScreen);
 export default createStackNavigator(
   {
     ProfileTabRoot: {
-      screen: protectedComponent(ConnectedProfileScreen),
+      screen: ConnectedProfileScreen,
     },
     UserProfile: {
       screen: UserProfile,

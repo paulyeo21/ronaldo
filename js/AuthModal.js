@@ -10,7 +10,8 @@ import {
   Text,
 } from 'react-native-elements';
 import t from 'tcomb-form-native';
-import * as sessionSelectors from './selectors/session';
+import sessionActions from './actions/session';
+import navActions from './actions/nav';
 
 const LoginFields = t.struct({
   username: t.String,
@@ -38,8 +39,8 @@ class AuthModal extends Component {
       this.props.login(email, password)
         .then(res => {
           if (res) {
-            this.props.navigation.navigate('MainNavigator');
-          } 
+            this.props.navigateTo(this.props.navigation.getParam('toRoute', 'MainNavigation'));
+          }
         });
     }
   }
@@ -54,7 +55,7 @@ class AuthModal extends Component {
             this.props.login(email, password)
               .then(res => {
                 if (res) {
-                  this.props.navigation.navigate('MainNavigator');
+                  this.props.navigateTo(this.props.navigation.getParam('toRoute', 'MainNavigation'));
                 }
               });
           } else {
@@ -85,7 +86,7 @@ class AuthModal extends Component {
   }
 
   onGoToContinueAsGuest = () => {
-    this.props.navigation.state.params.onAuthFailure();
+    this.props.navigateTo(this.props.navigation.getParam('backToRoute', 'MainNavigation'));
   }
 
   setForm = component => {
@@ -164,45 +165,9 @@ class AuthModal extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    authenticate: (email, password) => {
-      session.authenticate(email, password);
-    },
+    navigateTo: routeName => dispatch(navActions.navigateTo(routeName)),
+    login: (email, password) => dispatch(sessionActions.login(email, password))
   };
 }
 
-export const ConnectedAuthModal = connect(() => ({}), mapDispatchToProps)(AuthModal);
-
-export const protectedComponent = WrappedComponent => {
-  const mapStateToProps = (state, props) => {
-    return {
-      accessToken: sessionSelectors.get().tokens.access.value,
-    };
-  };
-
-  return connect(mapStateToProps)(
-    class ProtectedComponent extends Component {
-      componentWillMount() {
-        if (!this.props.accessToken) {
-          this.props.navigation.navigate('AuthModal',{
-            onAuthSuccess: this.onAuthSuccess,
-            onAuthFailure: this.onAuthFailure,
-          });
-        }
-      }
-
-      onAuthSuccess = () => {
-        this.props.navigation.navigate(this.props.navigation.state.routeName);
-      }
-
-      onAuthFailure = () => {
-        this.props.navigation.navigate('Home');
-      }
-
-      render() {
-        return this.props.accessToken
-          ? <WrappedComponent { ...this.props }/>
-          : null;
-      }
-    }
-  );
-};
+export const ConnectedAuthModal = connect(null, mapDispatchToProps)(AuthModal);

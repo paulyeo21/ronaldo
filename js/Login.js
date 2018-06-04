@@ -5,6 +5,7 @@ import { Text } from 'react-native-elements';
 import sessionActions from './actions/session';
 import { Form, LoginForm, loginFormOptions } from './forms';
 import styles from '../css';
+import navActions from './actions/nav';
 
 
 class LoginScreen extends Component {
@@ -30,18 +31,18 @@ class LoginScreen extends Component {
       this.props.login(email, password)
         .then(res => {
           if (res) {
-            this.props.navigation.dispatch({ type: 'MainNavigator' });
+            this.props.navigateTo('MainNavigator');
           }
         });
     }
   }
 
   onContinueAsGuest = () => {
-    this.props.navigation.dispatch({ type: 'MainNavigator' });
+    this.props.navigateTo('MainNavigator');
   }
 
   onRegister = () => {
-    this.props.navigation.dispatch({ type: 'Register' });
+    this.props.navigateTo('Register');
   }
 
   setForm = component => {
@@ -77,8 +78,8 @@ class LoginScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
+  navigateTo: routeName => dispatch(navActions.navigateTo(routeName)),
   login: (email, password) => dispatch(sessionActions.login(email, password))
 });
 
 export default connect(null, mapDispatchToProps)(LoginScreen);
-

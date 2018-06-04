@@ -1,13 +1,13 @@
-import { combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation';
+import { createSwitchNavigator } from 'react-navigation';
+import { NAVIGATE, SET_SESSION, CLEAR_SESSION } from '../actions/actionTypes';
 
 import Login from '../Login';
 import Register from '../Register';
 import MainNavigator from '../Navigator';
 
 // Defining this navigator here and importing into Ronaldo because for some reason it's undefined when import/export is reversed
-export const AppNavigator = createStackNavigator({
+export const AppNavigator = createSwitchNavigator({
   Login: { screen: Login },
   Register: { screen: Register },
   MainNavigator: { screen: MainNavigator },
@@ -16,37 +16,55 @@ export const AppNavigator = createStackNavigator({
   headerMode: 'none',
 });
 
-const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Login'));
+function findRouteNameFromNavigatorState ({ routes }) {
+  let route = routes[routes.length - 1];
+  while (route.index !== undefined) route = route.routes[route.index];
+  return route.routeName;
+}
 
-const firstAction = AppNavigator.router.getActionForPathAndParams('MainNavigator');
-const tempNavState = AppNavigator.router.getStateForAction(firstAction);
-const secondAction = AppNavigator.router.getActionForPathAndParams('Login');
-const initialNavState = AppNavigator.router.getStateForAction(
-  secondAction,
-  tempNavState
-);
+function buildProtectedNextState(toRoute, state) {
+  return state.isLoggedIn
+    ? AppNavigator.router.getStateForAction(
+        NavigationActions.navigate({ routeName: toRoute }),
+        state
+      )
+    : AppNavigator.router.getStateForAction(
+        NavigationActions.navigate({
+          routeName: 'AuthModal',
+          params: {
+            backToRoute: findRouteNameFromNavigatorState(state),
+            toRoute,
+          },
+        }),
+        state
+      );
+}
 
-export default nav = (state = initialNavState, action) => {
-  console.log(action.type);
+// set up initial state with the login screen
+const firstAction = AppNavigator.router.getActionForPathAndParams('Login');
+const initState = {
+  ...AppNavigator.router.getStateForAction(firstAction),
+  isLoggedIn: false,
+};
+
+export default nav = (state = initState, action) => {
   let nextState;
   switch (action.type) {
-    case 'Login':
-      nextState = AppNavigator.router.getStateForAction(
-        NavigationActions.back(),
-        state
-      );
+    case SET_SESSION:
+      nextState = {
+        ...state,
+        isLoggedIn: !!action.session.accessToken,
+      };
       break;
-    case 'Register':
-
-      nextState = AppNavigator.router.getStateForAction(
-        NavigationActions.navigate({ routeName: 'Register' }),
-        state
-      );
-      break;
-    default:
-      nextState = AppNavigator.router.getStateForAction(action, state);
+    case NAVIGATE:
+      switch (action.routeName) {
+        case 'Profile':
+          nextState = buildProtectedNextState('Profile', state);
+          break;
+      }
       break;
   }
 
-  return nextState || state;
+  // next state || default navigator next state || current state
+  return nextState || AppNavigator.router.getStateForAction(action, state) || state;
 }
