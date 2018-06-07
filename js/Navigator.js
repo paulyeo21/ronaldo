@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createBottomTabNavigator} from 'react-navigation';
+import { createSwitchNavigator, createBottomTabNavigator} from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SearchScreen from './SearchScreen';
 import HomeScreen from './HomeScreen';
@@ -7,6 +7,7 @@ import ListingsScreen from './ListingsScreen';
 import StatisticsScreen from './StatisticsScreen';
 import { ConnectedAuthModal } from './AuthModal';
 import ProfileScreen from './ProfileScreen';
+import TransitionSplash from './TransitionSplash';
 
 const BuyNavigator = createBottomTabNavigator(
   {
@@ -54,7 +55,7 @@ const SellNavigator = createBottomTabNavigator(
   }
 )
 
-const MainTabNavigator = createStackNavigator(
+const MainTabNavigator = createSwitchNavigator(
   {
     BuyNavigator: {
       screen: BuyNavigator,
@@ -64,7 +65,10 @@ const MainTabNavigator = createStackNavigator(
     },
     AuthModal: {
       screen: ConnectedAuthModal,
-    }
+    },
+    TransitionSplash: {
+      screen: TransitionSplash,
+    },
   },
   {
     mode: 'modal',

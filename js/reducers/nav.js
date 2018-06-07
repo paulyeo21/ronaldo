@@ -45,6 +45,7 @@ const firstAction = AppNavigator.router.getActionForPathAndParams('Login');
 const initState = {
   ...AppNavigator.router.getStateForAction(firstAction),
   isLoggedIn: false,
+  tabMode: 'BuyNavigator',
 };
 
 export default nav = (state = initState, action) => {
@@ -60,6 +61,48 @@ export default nav = (state = initState, action) => {
       switch (action.routeName) {
         case 'Profile':
           nextState = buildProtectedNextState('Profile', state);
+          break;
+        case 'SellNavigator':
+          if (action.options && action.options.force) {
+            nextState = AppNavigator.router.getStateForAction(
+              NavigationActions.navigate({ routeName: 'SellNavigator' }),
+              {
+                ...state,
+                tabMode: 'SellNavigator',
+              }
+            );
+          } else {
+            nextState = AppNavigator.router.getStateForAction(
+              NavigationActions.navigate({
+                routeName: 'TransitionSplash',
+                params: {
+                  toRoute: 'SellNavigator',
+                },
+              }),
+              state
+            );
+          }
+          break;
+        case 'BuyNavigator':
+          if (action.options && action.options.force) {
+            nextState = AppNavigator.router.getStateForAction(
+              NavigationActions.navigate({ routeName: 'BuyNavigator' }),
+              {
+                ...state,
+                tabMode: 'BuyNavigator',
+              }
+            );
+          } else {
+            nextState = AppNavigator.router.getStateForAction(
+              NavigationActions.navigate({
+                routeName: 'TransitionSplash',
+                params: {
+                  toRoute: 'BuyNavigator',
+                },
+              }),
+              state
+            );
+          }
           break;
       }
       break;

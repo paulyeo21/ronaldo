@@ -57,7 +57,7 @@ class ProfileScreen extends Component {
   render() {
     let switchToSellerItem;
     if (true || this.props.user.hasSeller) {
-      if (false) {
+      if (this.props.tabMode === 'SellNavigator') {
         switchToSellerItem = {
           key: "switchToBuyerNav",
           icon: "face",
@@ -123,7 +123,7 @@ class ProfileScreen extends Component {
 
 const mapStateToProps = (state, props) => {
   return {
-    user: state.session.user,
+    tabMode: state.nav.tabMode,
   };
 }
 

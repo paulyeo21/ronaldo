@@ -1,8 +1,9 @@
 import { NAVIGATE } from './actionTypes';
 
-const navigateTo = routeName => ({
+const navigateTo = (routeName, options={}) => ({
   type: NAVIGATE,
-  routeName
+  routeName,
+  options,
 });
 
 export default {
