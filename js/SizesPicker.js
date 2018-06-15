@@ -22,15 +22,15 @@ class SizesPicker extends Component {
 
   renderSizesRows = (sizes, handler) => {
     const partitions = this.partitionSizes(sizes);
-    return _.map(partitions, function(chunk) {
-      return <SizesRow
+    return _.map(partitions, chunk => (
+      <SizesRow
         key={ Math.random() }
         value={ chunk }
         touched={ sizes }
         style={ styles.sizesRow }
         handleOnPressSize={ handler }
       />
-    });
+    ));
   };
 
   render() {

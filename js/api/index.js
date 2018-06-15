@@ -65,7 +65,6 @@ export const logout = (accessToken, refreshToken) => {
 };
 
 export const fetchShoes = (payload) => {
-  console.log(payload);
   return fetch(url(`${routes.search.shoe}`), {
     method: 'POST',
     headers: {

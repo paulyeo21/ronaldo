@@ -9,11 +9,15 @@ import {
 /* <Size />
 ============================================================================= */
 class Size extends Component {
+  handleOnPressSize = () => {
+    this.props.handleOnPressSize(this.props.touched, this.props.value); // This binds without explicitly using .bind
+  };
+
   render() {
     return (
       <TouchableHighlight
         style={ this.props.touched ? styles.touchedSizeContainer : styles.sizeContainer }
-        onPress={ this.props.handleOnPressSize.bind(this, this.props.touched, this.props.value) }
+        onPress={ this.handleOnPressSize }
       >
         <Text style={ this.props.touched? styles.touchedSizeText : styles.sizeText }>
           { this.props.value }

@@ -351,7 +351,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchShoes: (payload) => dispatch(shoeActions.fetchShoes(payload))
+  fetchShoes: payload => dispatch(shoeActions.fetchShoes(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShoeList);
