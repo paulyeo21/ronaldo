@@ -1,30 +1,34 @@
-import { SET_SESSION, CLEAR_SESSION } from './actionTypes';
-import emailActions from './email';
+import { LOGIN_USER, LOGOUT_USER, SET_SESSION } from './actionTypes';
 import * as api from '../api';
 
+const loginUser = data => ({
+  type: LOGIN_USER,
+  data
+});
+
+const logoutUser = () => ({
+  type: LOGOUT_USER
+});
 
 const setSession = session => ({
   type: SET_SESSION,
   session
 });
 
-const clearSession = () => ({
-  type: CLEAR_SESSION
-});
-
 const login = (email, password) => {
   return dispatch => {
-    dispatch(emailActions.setEmail(email));
-
     return api.login(email, password)
       .then(res => {
         if (res.status == 200) {
-          const session = {
-            accessToken: res.headers.get('Set-Authorization'),
-            refreshToken: res.headers.get('Set-Refresh-Token')
+          const data = {
+            email: email,
+            session: {
+              accessToken: res.headers.get('Set-Authorization'),
+              refreshToken: res.headers.get('Set-Refresh-Token')
+            }
           };
-          dispatch(setSession(session));
-          return session;
+          dispatch(loginUser(data));
+          return data;
         } else {
           // Handle errors
         }
@@ -34,7 +38,7 @@ const login = (email, password) => {
 
 const currentLogin = () => {
   return (dispatch, getState) => {
-    const session = getState().session;
+    const session = getState().user.session;
     return api.currentLogin(session.accessToken, session.refreshToken)
       .then(res => {
         console.log(res);
@@ -49,15 +53,16 @@ const logout = () => {
       .then(res => {
         console.log(res);
         if (res.status == 200) {
-          dispatch(clearSession());
+          dispatch(logoutUser());
         }
       });
   };
 };
 
 export default {
+  loginUser,
+  logoutUser,
   setSession,
-  clearSession,
   login,
   currentLogin,
   logout
