@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
-import sessionReducer from './session';
 import userReducer from './user';
 import shoeReducer from './shoe';
+import navReducer from './nav';
 
-export default reducer = combineReducers({
-  session: sessionReducer,
+export default combineReducers({
   user: userReducer,
   shoes: shoeReducer,
+  nav: navReducer,
 });
-

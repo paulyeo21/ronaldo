@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export default shoe = (state = initialState, action) => {
-  const shoes = action.shoes
+  const shoes = action.shoes;
 
   switch (action.type) {
   case SET_SHOE_LISTINGS:

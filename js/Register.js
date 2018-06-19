@@ -10,9 +10,13 @@ import {
 } from 'react-native-elements';
 import { Form, RegisterForm, registerFormOptions } from './forms';
 import styles from '../css';
-import sessionActions from './actions/session';
+import userActions from './actions/user';
 import * as api from './api';
-
+import navActions from './actions/nav';
+import { 
+  LOGIN_ROUTE,
+  BUYER_HOME_ROUTE
+} from './routes';
 
 class RegisterScreen extends Component {
   constructor() {
@@ -35,7 +39,7 @@ class RegisterScreen extends Component {
             this.props.login(email, password)
               .then(res => {
                 if (res) {
-                  this.props.navigation.navigate('MainNavigator');
+                  this.props.navigateTo(BUYER_HOME_ROUTE);
                 }
               });
           } else {
@@ -66,7 +70,7 @@ class RegisterScreen extends Component {
   }
 
   onPressSignin = () => {
-    this.props.navigation.navigate('Login');
+    this.props.navigateTo(LOGIN_ROUTE);
   }
 
   render() {
@@ -98,8 +102,8 @@ class RegisterScreen extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(sessionActions.login(email, password))
+  navigateTo: routeName => dispatch(navActions.navigateTo(routeName)),
+  login: (email, password) => dispatch(userActions.login(email, password))
 });
 
 export default connect(null, mapDispatchToProps)(RegisterScreen);
-

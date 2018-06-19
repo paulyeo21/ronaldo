@@ -1,139 +1,120 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  StyleSheet,
   ScrollView,
   View,
   Text,
-  FlatList,
-  TouchableHighlight,
+  FlatList
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
 import Button from './shared/Button';
 import NavTabHeader from './shared/NavTabHeader';
 import BecomeSellerFlow from './BecomeSellerFlow';
 import UserProfile from './UserProfile';
-import { protectedComponent } from './AuthModal';
-import * as sessionSelectors from './selectors/session';
-
-const styles = StyleSheet.create({
-  ProfileListItemContainer: {
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingTop: 30,
-    paddingBottom: 30,
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-});
-
-class ProfileListItem extends Component {
-  onPress = () => {
-    this.props.navigation.navigate(this.props.navigateTo);
-  }
-
-  render() {
-    let content = <Text>{ this.props.text }</Text>;
-
-    return (
-      <TouchableHighlight
-         onPress={this.onPress}
-         activeOpacity={ 0.9 }
-         underlayColor='#d3d3d3'
-      >
-        <View style={ styles.ProfileListItemContainer }>
-          <Icon name={ this.props.icon } />
-          { content }
-        </View>
-      </TouchableHighlight>
-    )
-  }
-}
+import ProfileListItem from './ProfileListItem';
+import {
+  BUYER_HOME_ROUTE,
+  SELLER_HOME_ROUTE,
+  SELLER_TAB,
+  TRANSITION_SPLASH_ROUTE
+} from './routes';
 
 class ProfileScreen extends Component {
-  render() {
-    let switchToSellerItem;
-    if (true || this.props.user.hasSeller) {
-      if (false) {
-        switchToSellerItem = {
-          key: "switchToBuyerNav",
-          icon: "face",
-          text: "Switch to buyer",
-          navigateTo: "BuyNavigator",
+  _renderItem = ({ item }) => (
+    <ProfileListItem
+      navigation={ this.props.navigation }
+      { ...item }
+    />
+  );
+
+  sellerOrBuyerItem = () => {
+    if (true || this.props.isSeller) {
+      if (this.props.tabMode === SELLER_TAB) {
+        return {
+          key: 'switchToBuyerNav',
+          icon: 'face',
+          text: 'Switch to Buyer',
+          routeName: TRANSITION_SPLASH_ROUTE,
+          redirect: BUYER_HOME_ROUTE
         };
       } else {
-        switchToSellerItem = {
-          key: "switchToSellerNav",
-          icon: "face",
-          text: "Switch to seller",
-          navigateTo: "SellNavigator",
+        return {
+          key: 'switchToSellerNav',
+          icon: 'face',
+          text: 'Switch to Seller',
+          routeName: TRANSITION_SPLASH_ROUTE,
+          redirect: SELLER_HOME_ROUTE
         };
       }
     } else {
-      switchToSellerItem = {
-        key: "becomeSeller",
-        icon: "face",
-        text: "Become a Seller",
-        navigateTo: "BecomeSellerFlow",
+      return {
+        key: 'becomeSeller',
+        icon: 'face',
+        text: 'Become a Seller',
+        routeName: 'BecomeSellerFlow',
+        redirect: ''
       };
     }
+  };
 
-    const profileListItems = [
+  _profileListItems = () => {
+    return [
       {
-        key: "inviteFriends",
-        icon: "drafts",
-        text: "Invite Friends",
+        key: 'inviteFriends',
+        icon: 'drafts',
+        text: 'Invite Friends',
+        routeName: ''
       },
-      switchToSellerItem,
+      this.sellerOrBuyerItem(),
       {
-        key: "payment",
-        icon: "payment",
-        text: "Payment",
-      },
-      {
-        key: "settings",
-        icon: "settings",
-        text: "Settings",
+        key: 'payment',
+        icon: 'payment',
+        text: 'Payment',
+        routeName: ''
       },
       {
-        key: "feedback",
-        icon: "feedback",
-        text: "Feedback",
+        key: 'settings',
+        icon: 'settings',
+        text: 'Settings',
+        routeName: ''
+      },
+      {
+        key: 'feedback',
+        icon: 'feedback',
+        text: 'Feedback',
+        routeName: ''
       },
     ];
+  };
 
+  render() {
     return (
       <ScrollView>
         <Button
-          onPress={ () => { this.props.navigation.navigate("UserProfile") } }
+          onPress={ () => { this.props.navigation.navigate('UserProfile') } }
         >
           <NavTabHeader title='Profile' />
         </Button>
         <FlatList
-          data={ profileListItems }
-          renderItem={ ({ item }) => <ProfileListItem navigation={ this.props.navigation } { ...item } /> }
+          data={ this._profileListItems() }
+          renderItem={ this._renderItem }
         />
       </ScrollView>
     );
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {
-    user: sessionSelectors.get().user,
-  };
-}
+const mapStateToProps = (state, props) => ({
+  tabMode: state.nav.tabMode,
+  isSeller: state.user.isSeller
+});
 
 const ConnectedProfileScreen = connect(mapStateToProps)(ProfileScreen);
 
 export default createStackNavigator(
   {
     ProfileTabRoot: {
-      screen: protectedComponent(ConnectedProfileScreen),
+      screen: ConnectedProfileScreen,
     },
     UserProfile: {
       screen: UserProfile,
@@ -143,7 +124,7 @@ export default createStackNavigator(
     },
   },
   {
-    initialRouteName: "ProfileTabRoot",
+    initialRouteName: 'ProfileTabRoot',
     mode: 'modal',
     headerMode: 'none',
   },

@@ -2,8 +2,7 @@ import { Buffer } from 'buffer';
 import { config } from './config';
 import { routes } from './routes';
 import { store } from '../configureStore';
-import sessionActions from '../actions/session';
-import _ from 'underscore';
+import userActions from '../actions/user';
 
 const url = (path) => `${config.hostname}:${config.port}${path}`;
 
@@ -15,7 +14,7 @@ const fetchProtectedResource = (path, args) => {
       // If access token is expired then new tokens will be returned
       // in header because refresh token is included in original call header
       if (accessToken && refreshToken) {
-        store.dispatch(sessionActions.setSession({
+        store.dispatch(userActions.setSession({
           accessToken: accessToken,
           refreshToken: refreshToken
         }));
