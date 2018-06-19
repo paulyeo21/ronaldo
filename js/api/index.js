@@ -63,18 +63,13 @@ export const logout = (accessToken, refreshToken) => {
   });
 };
 
-export const fetchShoes = (query = '', fromPage = 0, pageSize = config.maxPageSize) => {
-  const args = {
-    method: 'GET',
+export const fetchShoes = (payload) => {
+  return fetch(url(`${routes.search.shoe}`), {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
-    }
-  };
-  if (query.length === 0) {
-    return fetch(url(`${routes.shoes.get}?from=${fromPage}&size=${pageSize}`), args);
-  } else {
-    return fetch(url(`${routes.search.shoe}?q=${query}&from=${fromPage}&size=${pageSize}`), args);
-  }
+    },
+    body: JSON.stringify(payload)
+  });
 };
-

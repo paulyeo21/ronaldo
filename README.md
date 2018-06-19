@@ -14,3 +14,4 @@ react-native run-android
 Follow directions to install Xcode: https://facebook.github.io/react-native/docs/getting-started.html#xcode
 
 react-native run-ios
+react-devtools
